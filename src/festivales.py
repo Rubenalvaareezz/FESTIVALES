@@ -1,6 +1,7 @@
+from collections import defaultdict
 import csv
 from datetime import date, datetime, time
-from typing import NamedTuple
+from typing import Counter, NamedTuple
  
 Artista = NamedTuple("Artista",     
                         [("nombre", str), 
@@ -54,5 +55,26 @@ def parsea_top(top:str)->bool:
     valor = top.strip().lower()
     return valor in ("1","sí","true")
 
-            
+def total_facturado(festivales:list[Festival], fecha_ini:date|None=None, fecha_fin:date|None=None)->float:
+    total = 0.0
+    for festival in festivales:
+        if (fecha_ini == None or fecha_ini <= festival.fecha_comienzo) and (fecha_fin == None or fecha_fin >= festival.fecha_fin):
+            if festival.estado == "CELEBRADO":
+                total += ((festival.entradas_vendidas*festival.precio))
+    return total
+
+def artista_top(festivales: list[Festival]) -> tuple[int, str]:
+    dicc = defaultdict(int)
+    for festival in festivales:
+        if festival.estado == "CELEBRADO":
+            for artistas in festival.artistas :
+                dicc[artistas.nombre] += 1
+    return max(dicc.items(), key = lambda t:t[1])
+
+def mes_mayor_beneficio_medio(festivales: list[Festival]) -> str:
+    
+    
+   
+def MESES(festival:Festival)->str:
+        
             
